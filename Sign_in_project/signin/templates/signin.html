@@ -1,0 +1,19 @@
+{% extends 'home.html' %}
+<!--Block content goes below-->
+
+{% block content %}
+<div class="container">
+    <div class="signin-form">
+        <form method="post">
+            {% csrf_token %}
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username">
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password">
+
+            <button type="submit">Sign In</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

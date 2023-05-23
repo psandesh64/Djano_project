@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+<!--Block content goes below-->
+
+{% block content %}
+<form class="container mt-5" method="post" >
+    {% csrf_token %}
+    <table>
+    <h3>
+    <tr>
+        <td>S.N</td>
+        <td>TODO List</td>
+        <td>Status</td>
+        <td></td>
+    </tr>
+    </h3>
+    {% for todo in todos %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ todo.todo_list }}</td>
+        <td>
+            {% if todo.status %}
+            <span>&#10004;</span> <!-- Tick mark symbol -->
+            {% else %}
+            <span>&#10006;</span> <!-- Cross mark symbol -->
+            {% endif %}
+        </td>
+        <td><a class="btn btn-sm btn-info" href="{% url 'todoedit' todo.id %}">Edit</a>
+        </td>      
+    </tr>
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td>{{form.title}}</td>
+        <td></td>
+        <td><button type="submit" class="btn btn-success">Submit</button></td>
+    </tr>
+    </table>
+</form>
+
+{% endblock %}

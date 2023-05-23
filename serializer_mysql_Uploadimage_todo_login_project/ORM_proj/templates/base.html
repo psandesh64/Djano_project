@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <!-- https://cdnjs.com/libraries/font-awesome -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Hello, world!</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg" style="background-color: #555555;" data-bs-theme="light">
+      <!-- Navbar content -->
+      <div class="container-fluid">
+        <a class="navbar-brand" href="">Volvox</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            {% if user.is_authenticated %}
+            <a class="nav-link" href="{% url 'picpage' %}">Pictures</a>
+            <a class="nav-link" href="{% url 'todopage' %}">TODO's</a>
+            {% endif %}
+          </div>
+        </div>
+        {% if user.is_authenticated %}
+        <ul class="navbar-nav mr-auto" >
+        <li class="nav-item">
+            <a style="color: azure;">Welcome {{request.user}}</a>
+            <a class="dropdwn-item" href="/logout"><button class="btn btn-success">Logout</button></a>
+        </li>
+        </ul>
+        {% else %}
+        <a href="/admin" role="button" target="_blank" class="btn btn-success m-1 my-sm-0">Admin Panel</a>
+         <!-- Button to trigger Login modal -->
+         <button type="button" class="btn btn-success mx-2" data-bs-toggle="modal" data-bs-target="#loginModal">
+          Login
+        </button>
+            <!-- Button to trigger Signup modal -->
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#signupModal">
+          Signup
+        </button>
+        {% endif %}
+      </div>
+    </nav>   
+
+    <!-- Signup Modal -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="signupModalLabel">Signup Here</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action='/signup' method="post">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Choose a unique username (lowercase and alphanumeric)" required>
+              </div>
+              <div class="mb-3">
+                <label for="fname" class="form-label">First Name</label>
+                <input type="text" class="form-control" id="fname" name="fname" placeholder="First Name" required>
+              </div>
+              <div class="mb-3">
+                <label for="lname" class="form-label">Last Name</label>
+                <input type="text" class="form-control" id="lname" name="lname" placeholder="Last Name" required>
+              </div>
+              <div class="mb-3">
+                <label for="useremail" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="useremail" name="useremail" placeholder="name@example.com" required>
+              </div>
+              <div class="mb-3">
+                <label for="pass1" class="form-label">Choose a Password</label>
+                <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Choose your password" required>
+              </div>
+              <div class="mb-3">
+                <label for="pass2" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="pass2" name="pass2" placeholder="Enter your password again" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="loginModalLabel">Login Here</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form action="/login" method="post">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="loginusername" name="loginusername" placeholder="Enter your username" required>
+              </div>
+              <div class="mb-3">
+                <label for="pass" class="form-label">Enter a Password</label>
+                <input type="password" class="form-control" id="loginpass" name="loginpass" placeholder="Enter your password" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <!-- Google login button -->
+            <a href="{% url 'google_login' %}" class="btn btn-secondary">
+              <i class="fa-brands fa-google"></i> Login with Google</a>
+               <!-- GitHub button starts here -->
+            <a href="{% url 'github_login' %}" class="btn btn-secondary">
+              <i class="fa fa-github fa-fw"></i>
+              <span>Login with GitHub</span>
+            </a>
+                <!-- GitHub button ends here -->        
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if user.is_anonymous %}
+    <form class="container mt-5" method="post" enctype="multipart/form-data">
+      <h1>File uploader</h1>
+        {% csrf_token %}
+       {{form.as_p}}
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+  </body>
+</html>
